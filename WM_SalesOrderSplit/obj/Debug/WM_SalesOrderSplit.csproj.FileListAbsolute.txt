@@ -14,3 +14,11 @@ C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\Debug\WM_SalesOrder
 C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_Sales.170F426A.Up2Date
 C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.exe
 C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.pdb
+C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\Debug\WM_SalesOrderSplit.exe
+C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\Debug\WM_SalesOrderSplit.pdb
+C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.csproj.AssemblyReference.cache
+C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.csproj.SuggestedBindingRedirects.cache
+C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.csproj.CoreCompileInputs.cache
+C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.csproj.CopyComplete
+C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.exe
+C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.pdb

@@ -31,7 +31,7 @@ namespace WM_SalesOrderSplit
             {
                 oMenus.AddEx(oCreationPackage);
 
-                Application.SBO_Application.StatusBar.SetText("Μαζική Έκδοση Παραστατικών Add-On Connected Successfully", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
+                Application.SBO_Application.StatusBar.SetText("Ειδικός Διαχωρισμός Παραγγελιών Add-On Connected Successfully", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
             }
             catch (Exception)
             {
