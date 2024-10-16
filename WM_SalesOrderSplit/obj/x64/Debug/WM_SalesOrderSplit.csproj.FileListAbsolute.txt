@@ -1,0 +1,8 @@
+C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\x64\Debug\WM_SalesOrderSplit.exe
+C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\x64\Debug\WM_SalesOrderSplit.pdb
+C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\x64\Debug\SAPBusinessOneSDK.dll
+C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.csproj.AssemblyReference.cache
+C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.csproj.CoreCompileInputs.cache
+C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_Sales.170F426A.Up2Date
+C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.exe
+C:\00. Teka\AddOns\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.pdb
