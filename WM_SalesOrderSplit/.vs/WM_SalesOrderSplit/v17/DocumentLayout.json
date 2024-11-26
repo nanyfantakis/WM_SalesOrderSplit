@@ -1,0 +1,61 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\wm.user2\\source\\repos\\WM_SalesOrderSplit\\WM_SalesOrderSplit\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7AE17AB8-7B97-4533-853B-C029A4674A11}|WM_SalesOrderSplit.csproj|c:\\users\\wm.user2\\source\\repos\\wm_salesordersplit\\wm_salesordersplit\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7AE17AB8-7B97-4533-853B-C029A4674A11}|WM_SalesOrderSplit.csproj|solutionrelative:menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7AE17AB8-7B97-4533-853B-C029A4674A11}|WM_SalesOrderSplit.csproj|C:\\Users\\wm.user2\\source\\repos\\WM_SalesOrderSplit\\WM_SalesOrderSplit\\prama\\stringia.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7AE17AB8-7B97-4533-853B-C029A4674A11}|WM_SalesOrderSplit.csproj|solutionrelative:prama\\stringia.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Stringia.cs",
+              "DocumentMoniker": "C:\\Users\\wm.user2\\source\\repos\\WM_SalesOrderSplit\\WM_SalesOrderSplit\\Prama\\Stringia.cs",
+              "RelativeDocumentMoniker": "Prama\\Stringia.cs",
+              "ToolTip": "C:\\Users\\wm.user2\\source\\repos\\WM_SalesOrderSplit\\WM_SalesOrderSplit\\Prama\\Stringia.cs",
+              "RelativeToolTip": "Prama\\Stringia.cs",
+              "ViewState": "AgIAAAsBAAAAAAAAAAAUwBcBAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-16T08:41:19.243Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Menu.cs",
+              "DocumentMoniker": "C:\\Users\\wm.user2\\source\\repos\\WM_SalesOrderSplit\\WM_SalesOrderSplit\\Menu.cs",
+              "RelativeDocumentMoniker": "Menu.cs",
+              "ToolTip": "C:\\Users\\wm.user2\\source\\repos\\WM_SalesOrderSplit\\WM_SalesOrderSplit\\Menu.cs",
+              "RelativeToolTip": "Menu.cs",
+              "ViewState": "AgIAAEMBAAAAAAAAAAAkwFABAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-16T07:49:52.75Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

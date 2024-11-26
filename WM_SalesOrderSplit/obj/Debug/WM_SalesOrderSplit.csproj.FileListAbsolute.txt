@@ -22,3 +22,10 @@ C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Deb
 C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.csproj.CopyComplete
 C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.exe
 C:\Users\nanyfantakis\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.pdb
+C:\Users\wm.user2\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\Debug\WM_SalesOrderSplit.exe
+C:\Users\wm.user2\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\Debug\WM_SalesOrderSplit.pdb
+C:\Users\wm.user2\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.csproj.AssemblyReference.cache
+C:\Users\wm.user2\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.csproj.CoreCompileInputs.cache
+C:\Users\wm.user2\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_Sales.170F426A.Up2Date
+C:\Users\wm.user2\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.exe
+C:\Users\wm.user2\Source\Repos\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\Debug\WM_SalesOrderSplit.pdb

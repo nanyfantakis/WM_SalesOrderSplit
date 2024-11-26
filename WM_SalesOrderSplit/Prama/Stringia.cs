@@ -23,6 +23,7 @@ namespace WM_SalesOrderSplit.Prama
                             "<Column Type=\"1\" MaxLength=\"100\" Uid=\"TargetType\" />" +
                             "<Column Type=\"2\" MaxLength=\"0\" Uid=\"TrgDocNtry\" />" +
                             "<Column Type=\"1\" MaxLength=\"100\" Uid=\"TrgObjTp\" />" +
+                            "<Column Type=\"1\" MaxLength=\"254\" Uid=\"ItmType\" />" +
                             "<Column Type=\"2\" MaxLength=\"0\" Uid=\"SapErrCode\" />" +
                             "<Column Type=\"3\" MaxLength=\"0\" Uid=\"SapErrMsg\" />" +
                           "</Columns>" +
@@ -151,15 +152,16 @@ namespace WM_SalesOrderSplit.Prama
                           "<specific CollapseLevel=\"0\" DataTable=\"AddResDT\" SelectionMode=\"0\">" +
                             "<RowHeaders Width=\"20\" />" +
                             "<GridColumns>" +
-                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"Αποτέλεσμα Καταχώρησης\" Width=\"100\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"AddRes\" sortable=\"0\" />" +
-                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"OriginType\" Width=\"100\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"OriginType\" sortable=\"0\" />" +
-                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"Κωδ. Παραστατικού Βάσης\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"OrgDocNtr\" sortable=\"0\" />" +
-                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"Τύπος Παραστατικού Βάσης\" Width=\"100\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"OrgObjTp\" sortable=\"0\" />" +
-                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"TargetType\" Width=\"100\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"TargetType\" sortable=\"0\" />" +
-                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"Κωδ. Παραστατικού Στόχου\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"TrgDocNtry\" sortable=\"0\" />" +
-                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"Τύπος Παραστατικού Στόχου\" Width=\"100\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"TrgObjTp\" sortable=\"0\" />" +
-                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"Κωδ. Σφάλματος\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"SapErrCode\" sortable=\"0\" />" +
-                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"Περιγραφή Σφάλματος\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"SapErrMsg\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"AddRes\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"AddRes\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"OriginType\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"OriginType\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"OrgDocNtr\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"OrgDocNtr\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"OrgObjTp\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"OrgObjTp\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"TargetType\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"TargetType\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"TrgDocNtry\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"TrgDocNtry\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"TrgObjTp\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"TrgObjTp\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"ItmType\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"ItmType\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"SapErrCode\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"SapErrCode\" sortable=\"0\" />" +
+                              "<GridColumn BackColor=\"-1\" ChooseFromListIsAutoFill=\"0\" TextStyle=\"0\" Visible=\"1\" AffectsFormMode=\"1\" Title=\"SapErrMsg\" Width=\"50\" Editable=\"0\" Type=\"16\" RightJustified=\"0\" UniqueID=\"SapErrMsg\" sortable=\"0\" />" +
                             "</GridColumns>" +
                           "</specific>" +
                         "</item>" +
@@ -221,15 +223,19 @@ namespace WM_SalesOrderSplit.Prama
               "</forms>" +
             "</Application>",
 
-            sExecSQL = "SELECT Q.\"DocEntry\", " +
+            sExecSQL = "SELECT V.*, IFNULL(G.\"ItmsGrpNam\", '') \"ItmsGrpNam\" FROM " +
+                       "    (SELECT Q.\"DocEntry\", " +
                        "        Q.\"CardCode\", " +
                        "        Q.\"DocDate\", " +
                        "        Q.\"TaxDate\", " +
                        "        Q.\"NumAtCard\", " +
+                       "        Q1.\"VisOrder\", " + 
                        "        Q1.\"LineNum\", " +
                        "        Q1.\"ItemCode\", " +
                        "        Q1.\"ObjType\", " +
-                       "        CASE I.\"QryGroup1\" WHEN 'Y' THEN 1 ELSE 2 END PROPERTIES " +
+                       //"        --CASE I.\"QryGroup1\" WHEN 'Y' THEN 1 ELSE 2 END PROPERTIES " +
+                       "        CASE I.\"QryGroup1\" WHEN 'Y' THEN 1 " +
+                       "        ELSE CASE I.\"QryGroup2\" WHEN 'Y' THEN 2 ELSE -1 END END PROPERTIES " +
                        "    FROM QUT1 Q1 " +
                        "    INNER JOIN OQUT Q ON Q.\"DocEntry\" = Q1.\"DocEntry\" " +
                        "    INNER JOIN OITM I ON I.\"ItemCode\" = Q1.\"ItemCode\" " +
@@ -241,9 +247,10 @@ namespace WM_SalesOrderSplit.Prama
                        "          AND R.CANCELED = 'N' " +
                        "        ) CNL ON CNL.\"BaseEntry\" = Q1.\"DocEntry\" AND CNL.\"BaseLine\" = Q1.\"LineNum\" " +
                        "    WHERE I.\"QryGroup4\" = 'N' " +
-                       "        AND (I.\"QryGroup1\" = 'Y' OR I.\"QryGroup2\" = 'Y') " +
+                       //"        --AND (I.\"QryGroup1\" = 'Y' OR I.\"QryGroup2\" = 'Y') " +
                        "        AND Q.\"DocEntry\" IN ({0}) " +
                        "        AND CNL.\"DocEntry\" IS NULL " +
+                       "        AND LEFT(I.\"ItemCode\", 3) != 'ΠΦΣ' " +
                        "    UNION ALL " +
                        "        SELECT 99999999, " +
                        "            NULL, " +
@@ -251,10 +258,12 @@ namespace WM_SalesOrderSplit.Prama
                        "            CURRENT_DATE, " +
                        "            NULL, " +
                        "            99999999, " +
+                       "            99999999, " +
                        "            NULL, " +
                        "            NULL, " +
                        "            99999999 " +
-                       "        FROM DUMMY " +
+                       "        FROM DUMMY ) V " +
+                       "        LEFT JOIN OITG G ON G.\"ItmsTypCod\" = V.PROPERTIES " +
                        "    ORDER BY 1 ASC, 9 ",
 
             sNextSQL = "SELECT 'N' \"Check\", " +
@@ -268,12 +277,12 @@ namespace WM_SalesOrderSplit.Prama
                            "         Q.\"TaxDate\", " +
                            //"         '{0}' \"TargetDate\", " +
                            "         Q.\"DocTotal\", " +
-                           "         Q.\"NumAtCard\", " +
+                           "         CASE IFNULL(Q.\"U_TKA_WebOrder\", '') WHEN '' THEN Q.\"NumAtCard\" ELSE Q.\"U_TKA_WebOrder\" END \"NumAtCard\", " +
                            "         TO_VARCHAR(Q.\"U_TKA_BPComments\") \"U_TKA_BPComments\", " +
                            "         N1.\"SeriesName\", " +
                            "         IFNULL(A.A, 0) ZERO_IS_INVALID " +
                            "     FROM QUT1 Q1 " +
-                           "     INNER JOIN OQUT Q ON Q.\"DocEntry\" = Q1.\"DocEntry\" " +
+                           "     INNER JOIN OQUT Q ON Q.\"DocEntry\" = Q1.\"DocEntry\" AND Q.CANCELED = 'N' " +
                            "     INNER JOIN OITM I ON I.\"ItemCode\" = Q1.\"ItemCode\" " +
                            "     INNER JOIN OCRD C ON C.\"CardCode\" = Q.\"CardCode\" " +
                            "     INNER JOIN NNM1 N1 ON N1.\"Series\" = Q.\"Series\" " +
@@ -287,7 +296,7 @@ namespace WM_SalesOrderSplit.Prama
                            "        ) CNL ON CNL.\"BaseEntry\" = Q1.\"DocEntry\" AND CNL.\"BaseLine\" = Q1.\"LineNum\" " +
                            "     LEFT JOIN " +
                            "         (SELECT COUNT(Q1.\"DocEntry\") A, Q1.\"DocEntry\" FROM QUT1 Q1 INNER JOIN OITM I ON I.\"ItemCode\" = Q1.\"ItemCode\" " +
-	                       "         LEFT JOIN(SELECT DISTINCT R1.\"BaseEntry\", R1.\"BaseLine\", R1.\"DocEntry\" " +
+                           "         LEFT JOIN(SELECT DISTINCT R1.\"BaseEntry\", R1.\"BaseLine\", R1.\"DocEntry\" " +
                            "         FROM RDR1 R1 " +
                            "         INNER JOIN ORDR R ON R.\"DocEntry\" = R1.\"DocEntry\"  " +
                            "         WHERE R1.\"BaseType\" = '23' AND R.CANCELED = 'N') CNL ON CNL.\"BaseEntry\" = Q1.\"DocEntry\" AND CNL.\"BaseLine\" = Q1.\"LineNum\" " +
@@ -297,6 +306,7 @@ namespace WM_SalesOrderSplit.Prama
                            "     WHERE 1=1 " +
                            "         AND (I.\"QryGroup4\" = 'N' OR 'Y' = '{0}') " +
                            "         AND CNL.\"DocEntry\" IS NULL " +
-                           "         AND (I.\"QryGroup1\" = 'Y' OR I.\"QryGroup2\" = 'Y') ";
+                           "          ";
+                           //"         AND (I.\"QryGroup1\" = 'Y' OR I.\"QryGroup2\" = 'Y') "
     }
 }
