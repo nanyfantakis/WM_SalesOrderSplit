@@ -229,7 +229,7 @@ namespace WM_SalesOrderSplit.Prama
                        "        Q.\"DocDate\", " +
                        "        Q.\"TaxDate\", " +
                        "        Q.\"NumAtCard\", " +
-                       "        Q1.\"VisOrder\", " + 
+                       "        Q1.\"VisOrder\", " +
                        "        Q1.\"LineNum\", " +
                        "        Q1.\"ItemCode\", " +
                        "        Q1.\"ObjType\", " +
@@ -305,8 +305,9 @@ namespace WM_SalesOrderSplit.Prama
                            "         GROUP BY Q1.\"DocEntry\") A ON A.\"DocEntry\" = Q1.\"DocEntry\" " +
                            "     WHERE 1=1 " +
                            "         AND (I.\"QryGroup4\" = 'N' OR 'Y' = '{0}') " +
+                           "         AND LEFT(I.\"ItemCode\", 3) != 'ΠΦΣ' " +
                            "         AND CNL.\"DocEntry\" IS NULL " +
                            "          ";
-                           //"         AND (I.\"QryGroup1\" = 'Y' OR I.\"QryGroup2\" = 'Y') "
+            //"         AND (I.\"QryGroup1\" = 'Y' OR I.\"QryGroup2\" = 'Y') ";
     }
 }

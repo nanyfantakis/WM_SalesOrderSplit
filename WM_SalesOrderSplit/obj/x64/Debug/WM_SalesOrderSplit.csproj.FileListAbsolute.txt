@@ -23,3 +23,12 @@ C:\_SVNSolutions\WinMedica\New folder\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\
 C:\_SVNSolutions\WinMedica\New folder\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.csproj.CopyComplete
 C:\_SVNSolutions\WinMedica\New folder\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.exe
 C:\_SVNSolutions\WinMedica\New folder\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.pdb
+C:\_SVNSolutions\WinMedica\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\x64\Debug\WM_SalesOrderSplit.exe
+C:\_SVNSolutions\WinMedica\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\x64\Debug\WM_SalesOrderSplit.pdb
+C:\_SVNSolutions\WinMedica\WM_SalesOrderSplit\WM_SalesOrderSplit\bin\x64\Debug\SAPBusinessOneSDK.dll
+C:\_SVNSolutions\WinMedica\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.csproj.AssemblyReference.cache
+C:\_SVNSolutions\WinMedica\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.csproj.SuggestedBindingRedirects.cache
+C:\_SVNSolutions\WinMedica\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.csproj.CoreCompileInputs.cache
+C:\_SVNSolutions\WinMedica\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.csproj.CopyComplete
+C:\_SVNSolutions\WinMedica\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.exe
+C:\_SVNSolutions\WinMedica\WM_SalesOrderSplit\WM_SalesOrderSplit\obj\x64\Debug\WM_SalesOrderSplit.pdb

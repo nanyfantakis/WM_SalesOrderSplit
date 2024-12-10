@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MeiktesEkptwseis.cs" />
     <Compile Include="Prama\Stringia.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Menu.cs" />

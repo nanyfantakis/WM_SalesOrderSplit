@@ -10,7 +10,8 @@ namespace WM_SalesOrderSplit
         /// The main entry point for the application.
         /// </summary>
         public SAPbouiCOM.Form oForm = (SAPbouiCOM.Form)Application.SBO_Application.Forms.ActiveForm;
-
+        public static SAPbouiCOM.EventFilters oFilters;
+        public static SAPbouiCOM.EventFilter oFilter;
 
         [STAThread]
         static void Main(string[] args)
@@ -31,7 +32,6 @@ namespace WM_SalesOrderSplit
                 Menu MyMenu = new Menu();
                 MyMenu.AddMenuItems();
                 oApp.RegisterMenuEventHandler(MyMenu.SBO_Application_MenuEvent);
-                Application.SBO_Application.AppEvent += new SAPbouiCOM._IApplicationEvents_AppEventEventHandler(SBO_Application_AppEvent);
                 oApp.Run();
             }
             catch (Exception ex)
@@ -39,7 +39,35 @@ namespace WM_SalesOrderSplit
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
         }
+        static void SetFilters()
+        {
+            // Create a new EventFilters object
+            oFilters = new SAPbouiCOM.EventFilters();
+            oFilter = oFilters.Add(SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE);
+            oFilter.AddEx("133");
+            oFilter.AddEx("139");
+            oFilter.AddEx("140");
+            oFilter.AddEx("149");
+            oFilter.AddEx("179");
+            oFilter.AddEx("180");
+            oFilter.AddEx("234234567");
 
+            oFilter = oFilters.Add(SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD);
+            oFilter.AddEx("133");
+            oFilter.AddEx("139");
+            oFilter.AddEx("140");
+            oFilter.AddEx("149");
+            oFilter.AddEx("179");
+            oFilter.AddEx("180");
+            oFilter.AddEx("234234567");
+
+            Application.SBO_Application.SetFilter(oFilters);
+        }
+        static void Initialize_Event()
+        {
+            Application.SBO_Application.AppEvent += new SAPbouiCOM._IApplicationEvents_AppEventEventHandler(SBO_Application_AppEvent);
+            Application.SBO_Application.FormDataEvent += new SAPbouiCOM._IApplicationEvents_FormDataEventEventHandler(MeiktesEkptwseis.SBO_Application_FormDataEvent);
+        }
         static void SBO_Application_AppEvent(SAPbouiCOM.BoAppEventTypes EventType)
         {
             switch (EventType)

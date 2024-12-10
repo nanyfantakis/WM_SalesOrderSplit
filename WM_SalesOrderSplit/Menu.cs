@@ -435,9 +435,7 @@ namespace WM_SalesOrderSplit
                    sSQL,
                    sCardCode,
                    sItemType,
-                   sNewDocEntry,
-                   sSQLLines = "SELECT \"AliasID\" FROM CUFD WHERE \"TableID\" = 'RDR1'",
-                   sSQLHeader = "SELECT \"AliasID\" FROM CUFD WHERE \"TableID\" = 'ORDR'";
+                   sNewDocEntry;
 
             SAPbouiCOM.Grid oGrid,
                             oAddResultGrid;
@@ -781,7 +779,7 @@ namespace WM_SalesOrderSplit
                             rsGetData.MoveNext();
                         }
                     }
-                    catch(Exception e)
+                    catch(Exception)
                     {
                         //Application.SBO_Application.MessageBox("The Following Error Occurred:\n" + e.Message + "\n" + e.StackTrace);
                     }
