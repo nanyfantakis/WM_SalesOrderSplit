@@ -10,43 +10,56 @@ namespace WM_SalesOrderSplit
     class MeiktesEkptwseis
     {
         public static Company company = (Company)SAPbouiCOM.Framework.Application.SBO_Application.Company.GetDICompany();
+        //public static Company company = (Company)Menu.company;
 
-        public static void SBO_Application_FormDataEvent(ref SAPbouiCOM.BusinessObjectInfo BusinessObjectInfo, out bool BubbleEvent)
+        public static void SBO_Application_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
         {
             BubbleEvent = true;
 
-            if ((BusinessObjectInfo.FormTypeEx == "133" ||
-                BusinessObjectInfo.FormTypeEx == "139" ||
-                BusinessObjectInfo.FormTypeEx == "140" ||
-                BusinessObjectInfo.FormTypeEx == "149" ||
-                BusinessObjectInfo.FormTypeEx == "179" ||
-                BusinessObjectInfo.FormTypeEx == "180" ||
-                BusinessObjectInfo.FormTypeEx == "234234567"
+            SAPbouiCOM.Form form = null;
+
+            try
+            {
+                form = SAPbouiCOM.Framework.Application.SBO_Application.Forms.ActiveForm;
+            }
+            catch (Exception) { }
+
+            if ((
+                pVal.FormType.ToString() == "133" ||
+                pVal.FormType.ToString() == "139" ||
+                pVal.FormType.ToString() == "140" ||
+                pVal.FormType.ToString() == "149" ||
+                pVal.FormType.ToString() == "179" ||
+                pVal.FormType.ToString() == "180" ||
+                pVal.FormType.ToString() == "234234567"
                 )
-                && BusinessObjectInfo.BeforeAction == true
-                && (BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_UPDATE || BusinessObjectInfo.EventType == SAPbouiCOM.BoEventTypes.et_FORM_DATA_ADD))
+                && pVal.ItemUID == "1"
+                && pVal.BeforeAction == true
+                && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED
+                && (form.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE
+                    || form.Mode == SAPbouiCOM.BoFormMode.fm_UPDATE_MODE)
+                )
             {
 
                 SAPbouiCOM.Framework.Application.SBO_Application.StatusBar.SetText("Υπολογισμός Μεικτών Εκπτώσεων", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
 
-                SAPbouiCOM.Form form = SAPbouiCOM.Framework.Application.SBO_Application.Forms.ActiveForm;
-
-                string sFinalItemCodes = "",
+                try
+                {
+                    string sFinalItemCodes = "",
                        sCardCode = "",
                        sItem = "",
                        sDBDS = "",
-                       sFormType = "$[CURRENT_FORMTYPE]";
+                       sFormType = form.Type.ToString(); // "$[CURRENT_FORMTYPE]";
 
-                double dQty = 0.0;
+                    double dQty = 0.0;
 
-                Dictionary<string, double> ListItemCodes = new Dictionary<string, double>();
+                    Dictionary<string, double> ListItemCodes = new Dictionary<string, double>();
 
-                Recordset rsPrama = null;
+                    Recordset rsPrama = null;
 
-                List<string> lExistingItems = new List<string>();
-                List<string> lNonExistingItems = new List<string>();
-                try
-                {
+                    List<string> lExistingItems = new List<string>();
+                    List<string> lNonExistingItems = new List<string>();
+
                     switch (sFormType)
                     {
                         case "133":

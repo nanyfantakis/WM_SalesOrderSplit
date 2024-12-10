@@ -1,7 +1,8 @@
-﻿using SAPbobsCOM;
-//using SAPbouiCOM;
+﻿//using SAPbouiCOM;
+using SAPbobsCOM;
 using SAPbouiCOM.Framework;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Linq;
 using WM_SalesOrderSplit.Prama;
@@ -296,7 +297,7 @@ namespace WM_SalesOrderSplit
                 if (form.PaneLevel == 2)
                 {
                     sErr = "Build sSQL";
-//                    sSQL = string.Format(Stringia.sNextSQL, form.DataSources.UserDataSources.Item("DocDateDS").Value.ToString(), form.DataSources.UserDataSources.Item("ElleipsiDS").Value.ToString());
+                    //                    sSQL = string.Format(Stringia.sNextSQL, form.DataSources.UserDataSources.Item("DocDateDS").Value.ToString(), form.DataSources.UserDataSources.Item("ElleipsiDS").Value.ToString());
                     sSQL = string.Format(Stringia.sNextSQL, form.DataSources.UserDataSources.Item("ElleipsiDS").Value.ToString());
 
                     sSQL += System.Environment.NewLine;
@@ -306,10 +307,10 @@ namespace WM_SalesOrderSplit
                     sErr = "B";
                     for (int i = 0; i < ((SAPbouiCOM.Grid)form.Items.Item("SeriesFrGr").Specific).Rows.Count; i++)
                     {
-                        if (((SAPbouiCOM.Grid)form.Items.Item("SeriesFrGr").Specific).DataTable.GetValue("Check", 
+                        if (((SAPbouiCOM.Grid)form.Items.Item("SeriesFrGr").Specific).DataTable.GetValue("Check",
                             ((SAPbouiCOM.Grid)form.Items.Item("SeriesFrGr").Specific).GetDataTableRowIndex(i)).ToString() == "Y")
                         {
-                            sSeries += "," + ((SAPbouiCOM.Grid)form.Items.Item("SeriesFrGr").Specific).DataTable.GetValue("Series", 
+                            sSeries += "," + ((SAPbouiCOM.Grid)form.Items.Item("SeriesFrGr").Specific).DataTable.GetValue("Series",
                                 ((SAPbouiCOM.Grid)form.Items.Item("SeriesFrGr").Specific).GetDataTableRowIndex(i)).ToString();
                         }
                     }
@@ -353,7 +354,7 @@ namespace WM_SalesOrderSplit
                             "   Q.\"CardName\", " +
                             "   Q.\"DocDate\", " +
                             "   Q.\"TaxDate\", " +
-//                            "   '" + form.DataSources.UserDataSources.Item("DocDateDS").Value.ToString() + "', " +
+                            //                            "   '" + form.DataSources.UserDataSources.Item("DocDateDS").Value.ToString() + "', " +
                             "   Q.\"DocTotal\", " +
                             "   C.\"LicTradNum\", " +
                             "   C.\"U_TKA_CustSubCategory\", " +
@@ -397,7 +398,7 @@ namespace WM_SalesOrderSplit
                     oFinalGrid.Columns.Item("TaxDate").TitleObject.Caption = "Ημ. Καταχώρησης";
                     oFinalGrid.Columns.Item("SeriesName").TitleObject.Caption = "Σειρά παραστατικού";
                     oFinalGrid.Columns.Item("U_TKA_BPComments").TitleObject.Caption = "Σχόλια Πελατών";
-                    
+
                     //oFinalGrid.Columns.Item("QryGroup4").Visible = false;
                     oFinalGrid.Columns.Item("DocDate").Visible = false;
                     oFinalGrid.Columns.Item("ZERO_IS_INVALID").Visible = false;
@@ -408,7 +409,7 @@ namespace WM_SalesOrderSplit
                     {
                         if (oFinalGrid.DataTable.GetValue("ZERO_IS_INVALID", i).ToString() == "0")
                         {
-                            oFinalGrid.CommonSetting.SetRowEditable(i+1, false);
+                            oFinalGrid.CommonSetting.SetRowEditable(i + 1, false);
                         }
                     }
 
@@ -467,7 +468,7 @@ namespace WM_SalesOrderSplit
                     return;
                 }
                 rsInsertIntoErrorsTable = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
-//                rsInsertIntoErrorsTable.DoQuery("INSERT INTO ERRORS SELECT current_date || ' ' || current_time, 'SalesOrderSplit', '', '', 'Tran Start', 'SUCCESS' FROM DUMMY;");
+                //                rsInsertIntoErrorsTable.DoQuery("INSERT INTO ERRORS SELECT current_date || ' ' || current_time, 'SalesOrderSplit', '', '', 'Tran Start', 'SUCCESS' FROM DUMMY;");
 
                 sErr = "A";
                 oGrid = (SAPbouiCOM.Grid)form.Items.Item("ResultsGRD").Specific;
@@ -526,7 +527,7 @@ namespace WM_SalesOrderSplit
                     Application.SBO_Application.MessageBox("Δεδομένα δεν βρέθηκαν με τα συγκεκριμένα κριτήρια.");
                     return;
                 }
-                
+
                 SAPbouiCOM.ProgressBar prg = Application.SBO_Application.StatusBar.CreateProgressBar("sdasda", rsGetData.RecordCount - 1, false);
                 prg.Text = "Καταχώρηση Παραστατικών";
                 prg.Value = 0;
@@ -606,7 +607,7 @@ namespace WM_SalesOrderSplit
                                                  "   AND \"DocEntry\" = " + oBaseDoc.DocEntry);
 
                             if (rsGetPFSData.RecordCount > 0)
-                            { 
+                            {
                                 oBaseDocPFS = (Documents)company.GetBusinessObject(BoObjectTypes.oQuotations);
                                 oBaseDocPFS.GetByKey(oBaseDoc.DocEntry);
 
@@ -645,7 +646,7 @@ namespace WM_SalesOrderSplit
                                         oOrderPFS.Lines.Add();
 
                                         oOrderPFS.Lines.ItemCode = Convert.ToString(rsGetPFSData.Fields.Item("ITEM_CODE").Value, CultureInfo.InvariantCulture);
-                                        oOrderPFS.Lines.LineTotal = Convert.ToDouble(rsGetPFSData.Fields.Item("AMOUNT").Value,   CultureInfo.InvariantCulture);
+                                        oOrderPFS.Lines.LineTotal = Convert.ToDouble(rsGetPFSData.Fields.Item("AMOUNT").Value, CultureInfo.InvariantCulture);
                                         oOrderPFS.Lines.VatGroup = Convert.ToString(rsGetPFSData.Fields.Item("VAT_GROUP").Value, CultureInfo.InvariantCulture);
                                     }
 
@@ -747,7 +748,7 @@ namespace WM_SalesOrderSplit
                 finally
                 {
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(prg);
-                    prg = null; 
+                    prg = null;
                 }
 
                 if (bElleipiEidi)
@@ -779,7 +780,7 @@ namespace WM_SalesOrderSplit
                             rsGetData.MoveNext();
                         }
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         //Application.SBO_Application.MessageBox("The Following Error Occurred:\n" + e.Message + "\n" + e.StackTrace);
                     }
@@ -794,9 +795,9 @@ namespace WM_SalesOrderSplit
                 oAddResultGrid.Columns.Item("SapErrMsg").TitleObject.Caption = "Περιγραφή Σφάλματος";
                 oAddResultGrid.Columns.Item("ItmType").TitleObject.Caption = "Τύπος Είδους";
 
-                oAddResultGrid.Columns.Item("OrgObjTp").Visible = false; 
-                oAddResultGrid.Columns.Item("OriginType").Visible = false; 
-                oAddResultGrid.Columns.Item("TargetType").Visible = false; 
+                oAddResultGrid.Columns.Item("OrgObjTp").Visible = false;
+                oAddResultGrid.Columns.Item("OriginType").Visible = false;
+                oAddResultGrid.Columns.Item("TargetType").Visible = false;
 
                 ((SAPbouiCOM.EditTextColumn)oAddResultGrid.Columns.Item("OrgDocNtr")).LinkedObjectType = "23";
                 ((SAPbouiCOM.EditTextColumn)oAddResultGrid.Columns.Item("TrgDocNtry")).LinkedObjectType = "17";
@@ -805,7 +806,7 @@ namespace WM_SalesOrderSplit
 
                 oAddResultGrid.AutoResizeColumns();
 
-//                rsInsertIntoErrorsTable.DoQuery("INSERT INTO ERRORS SELECT current_date || ' ' || current_time, 'SalesOrderSplit', '', '', 'Tran End', 'SUCCESS' FROM DUMMY;");
+                //                rsInsertIntoErrorsTable.DoQuery("INSERT INTO ERRORS SELECT current_date || ' ' || current_time, 'SalesOrderSplit', '', '', 'Tran End', 'SUCCESS' FROM DUMMY;");
             }
             catch (Exception e)
             {
@@ -816,5 +817,206 @@ namespace WM_SalesOrderSplit
                 form.Freeze(false);
             }
         }
+
+        public static void SBO_Application_ItemEvent(string FormUID, ref SAPbouiCOM.ItemEvent pVal, out bool BubbleEvent)
+        {
+            BubbleEvent = true;
+
+            SAPbouiCOM.Form form = null;
+
+            try
+            {
+                form = Application.SBO_Application.Forms.ActiveForm;
+            }
+            catch (Exception) { }
+
+            if ((
+                pVal.FormType.ToString() == "133" ||
+                pVal.FormType.ToString() == "139" ||
+                pVal.FormType.ToString() == "140" ||
+                pVal.FormType.ToString() == "149" ||
+                pVal.FormType.ToString() == "179" ||
+                pVal.FormType.ToString() == "180" ||
+                pVal.FormType.ToString() == "234234567"
+                )
+                && pVal.ItemUID == "1"
+                && pVal.BeforeAction == true
+                && pVal.EventType == SAPbouiCOM.BoEventTypes.et_ITEM_PRESSED
+                && (form.Mode == SAPbouiCOM.BoFormMode.fm_ADD_MODE
+                    || form.Mode == SAPbouiCOM.BoFormMode.fm_UPDATE_MODE)
+                )
+            {
+
+                SAPbouiCOM.Framework.Application.SBO_Application.StatusBar.SetText("Υπολογισμός Μεικτών Εκπτώσεων", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
+
+                try
+                {
+                    string sFinalItemCodes = "",
+                       sCardCode = "",
+                       sItem = "",
+                       sDBDS = "",
+                       sFormType = form.Type.ToString(); // "$[CURRENT_FORMTYPE]";
+
+                    double dQty = 0.0;
+
+                    Dictionary<string, double> ListItemCodes = new Dictionary<string, double>();
+
+                    Recordset rsPrama = null;
+
+                    List<string> lExistingItems = new List<string>();
+                    List<string> lNonExistingItems = new List<string>();
+
+                    switch (sFormType)
+                    {
+                        case "133":
+                            sDBDS = "OINV";
+                            break;
+                        case "139":
+                            sDBDS = "ORDR";
+                            break;
+                        case "140":
+                            sDBDS = "ODLN";
+                            break;
+                        case "149":
+                            sDBDS = "OQUT";
+                            break;
+                        case "179":
+                            sDBDS = "ORIN";
+                            break;
+                        case "180":
+                            sDBDS = "ORDN";
+                            break;
+                        case "234234567":
+                            sDBDS = "ORRR";
+                            break;
+                        default:
+                            return;
+                    }
+
+                    sCardCode = form.DataSources.DBDataSources.Item(sDBDS).GetValue("CardCode", 0).ToString();
+
+                    SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)form.Items.Item("38").Specific;
+
+                    if (form.DataSources.DBDataSources.Item(sDBDS).GetValue("DocStatus", 0).ToString() == "C")
+                    {
+                        return;
+                    }
+
+                    for (int i = 1; i <= oMatrix.VisualRowCount; i++)
+                    {
+                        sItem = ((SAPbouiCOM.EditText)oMatrix.Columns.Item("1").Cells.Item(i).Specific).Value.ToString();
+                        dQty = Convert.ToDouble(((SAPbouiCOM.EditText)oMatrix.Columns.Item("11").Cells.Item(i).Specific).Value, System.Globalization.CultureInfo.InvariantCulture);
+
+                        if (string.IsNullOrEmpty(sItem))
+                        {
+                            continue;
+                        }
+
+                        if (!sItem.StartsWith("ΠΦΣ"))
+                        {
+                            if (!ListItemCodes.ContainsKey(sItem))
+                            {
+                                ListItemCodes.Add(sItem, dQty);
+
+                                sFinalItemCodes += ";" + sItem + "?" + dQty;
+                            }
+                            else
+                            {
+                                ListItemCodes[sItem] = ListItemCodes[sItem] + dQty;
+                            }
+                        }
+                    }
+                    sFinalItemCodes = sFinalItemCodes.Substring(1);
+
+                    rsPrama = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
+
+                    //string sSQL = "SELECT ITEMCODE FROM TKA_F_GET_MEIKTES_DISCOUNTS_V3('" + sFinalItemCodes + "', '" + sCardCode + "', CURRENT_DATE, '', '')";
+                    string sSQL = "CALL TKA_SP_GET_MEIKTES_DISCOUNTS_V3('" + sFinalItemCodes + "', '" + sCardCode + "', CURRENT_DATE, '', '')";
+
+                    rsPrama.DoQuery(sSQL);
+
+                    if (rsPrama.RecordCount > 0)
+                    {
+                        /*rsPrama.MoveFirst();
+                        
+                        while (!rsPrama.EoF)
+                        { // vriskoume ta eidh set
+                            if (!lExistingItems.Contains(rsPrama.Fields.Item("ITEMCODE").Value.ToString()))
+                            {
+                                lExistingItems.Add(rsPrama.Fields.Item("ITEMCODE").Value.ToString());
+                            }
+
+                            rsPrama.MoveNext();
+                        }
+
+                        // vriskoume ta eidh poy einai sthn paraggelia alla oxi se set
+                        foreach (KeyValuePair<string, double> p in ListItemCodes)
+                        {
+                            if (!lExistingItems.Contains(p.Key))
+                            {
+                                lNonExistingItems.Add(p.Key);
+                            }
+                        }
+
+                        // trwme ta eidh poy einai sthn paraggelia alla oxi se set
+                        for (int i = 0; i < lNonExistingItems.Count; i++)
+                        {
+                            ListItemCodes.Remove(lNonExistingItems[i]);
+                        }
+
+                        double dTotalSetQty = 0.0;
+
+                        // vriskoume to total twn eidwn set
+                        foreach (KeyValuePair<string, double> p in ListItemCodes)
+                        {
+                            dTotalSetQty += p.Value;
+                        }
+
+                        rsPrama.DoQuery("SELECT * FROM TKA_F_GET_MEIKTES_DISCOUNTS_V3('" + sFinalItemCodes + "', '" + sCardCode + "', CURRENT_DATE, '', '')");
+
+                        if (rsPrama.RecordCount > 0)
+                        {*/
+                        if (SAPbouiCOM.Framework.Application.SBO_Application.MessageBox("Βρέθηκαν τιμές σετ.\nΕνημέρωση γραμμών;", 2, "Ναι", "Όχι") != 1)
+                        {
+                            return;
+                        }
+                    }
+
+                    rsPrama.MoveFirst();
+
+                    form.Freeze(true);
+
+                    while (!rsPrama.EoF)
+                    {
+                        for (int i = 1; i <= oMatrix.VisualRowCount; i++)
+                        {
+                            sItem = ((SAPbouiCOM.EditText)oMatrix.Columns.Item("1").Cells.Item(i).Specific).Value.ToString();
+
+                            if (rsPrama.Fields.Item("ITEMCODE").Value.ToString() == sItem)
+                            {
+                                ((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_TKA_Discount2").Cells.Item(i).Specific).Value = rsPrama.Fields.Item("DISCOUNT").Value.ToString();
+
+                                ((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_TKA_Discount1").Cells.Item(i).Specific).Value = string.Empty;
+                                ((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_TKA_Discount3").Cells.Item(i).Specific).Value = string.Empty;
+
+                                continue;
+                            }
+                        }
+
+                        rsPrama.MoveNext();
+                    }
+                    //}
+                }
+                catch (Exception e)
+                {
+                    Application.SBO_Application.MessageBox("The Following Error Occurred:\n" + e.Message + "\n" + e.StackTrace);
+                }
+                finally
+                {
+                    form.Freeze(false);
+                }
+            }
+        }
+
     }
 }
