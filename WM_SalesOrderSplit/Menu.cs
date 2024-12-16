@@ -413,7 +413,6 @@ namespace WM_SalesOrderSplit
                         }
                     }
 
-
                     oFinalGrid.AutoResizeColumns();
                 }
 

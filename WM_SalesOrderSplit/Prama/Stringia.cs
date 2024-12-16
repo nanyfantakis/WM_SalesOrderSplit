@@ -302,6 +302,7 @@ namespace WM_SalesOrderSplit.Prama
                            "         WHERE R1.\"BaseType\" = '23' AND R.CANCELED = 'N') CNL ON CNL.\"BaseEntry\" = Q1.\"DocEntry\" AND CNL.\"BaseLine\" = Q1.\"LineNum\" " +
                            "         WHERE I.\"QryGroup4\" = 'N' " +
                            "         AND CNL.\"DocEntry\" IS NULL " +
+                           "         AND LEFT(I.\"ItemCode\", 3) != 'ΠΦΣ' " +
                            "         GROUP BY Q1.\"DocEntry\") A ON A.\"DocEntry\" = Q1.\"DocEntry\" " +
                            "     WHERE 1=1 " +
                            "         AND (I.\"QryGroup4\" = 'N' OR 'Y' = '{0}') " +
