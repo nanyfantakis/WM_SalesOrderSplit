@@ -77,18 +77,6 @@ namespace WM_SalesOrderSplit
                         rsGetPrama.MoveNext();
                     }
 
-                    /*rsGetPrama.DoQuery("SELECT \"Series\", \"SeriesName\" FROM NNM1 WHERE \"ObjectCode\" = '23' " +
-                                        " UNION ALL SELECT '-1', '' FROM DUMMY ORDER BY 1 ");
-
-                    oCB1 = (SAPbouiCOM.ComboBox)form.Items.Item("SeriesFrom").Specific;
-
-                    while (!rsGetPrama.EoF)
-                    {
-                        oCB1.ValidValues.Add(rsGetPrama.Fields.Item(0).Value.ToString(), rsGetPrama.Fields.Item(1).Value.ToString());
-
-                        rsGetPrama.MoveNext();
-                    }*/
-
                     rsGetPrama.DoQuery("SELECT T0.\"Name\", T0.\"Code\" FROM \"@TKA_SUBCATEGORY\" T0 " +
                                         " UNION ALL SELECT '', '' FROM DUMMY ORDER BY 1");
 
@@ -215,10 +203,10 @@ namespace WM_SalesOrderSplit
             {
                 form.PaneLevel--;
 
-                if (form.PaneLevel == 2)
-                {
-                    form.Items.Item("RefreshBT").Click();
-                }
+                //if (form.PaneLevel == 2)
+                //{
+                //    form.Items.Item("RefreshBT").Click();
+                //}
             }
             catch (Exception e)
             {
@@ -262,7 +250,9 @@ namespace WM_SalesOrderSplit
         {
             string sSQL,
                    sErr = "A",
-                   sCardCode;
+                   sCardCode,
+                   sElleipsiDS, 
+                   sClosedDS; 
 
             SAPbouiCOM.Grid oFinalGrid;
 
@@ -298,7 +288,26 @@ namespace WM_SalesOrderSplit
                 {
                     sErr = "Build sSQL";
                     //                    sSQL = string.Format(Stringia.sNextSQL, form.DataSources.UserDataSources.Item("DocDateDS").Value.ToString(), form.DataSources.UserDataSources.Item("ElleipsiDS").Value.ToString());
-                    sSQL = string.Format(Stringia.sNextSQL, form.DataSources.UserDataSources.Item("ElleipsiDS").Value.ToString());
+
+                    if (string.IsNullOrEmpty(form.DataSources.UserDataSources.Item("ClosedDS").Value.ToString()))
+                    {
+                        sClosedDS = "N";
+                    }
+                    else
+                    {
+                        sClosedDS = form.DataSources.UserDataSources.Item("ClosedDS").Value.ToString();
+                    }
+
+                    if (string.IsNullOrEmpty(form.DataSources.UserDataSources.Item("ElleipsiDS").Value.ToString()))
+                    {
+                        sElleipsiDS = "N";
+                    }
+                    else
+                    {
+                        sElleipsiDS = form.DataSources.UserDataSources.Item("ElleipsiDS").Value.ToString();
+                    }
+
+                    sSQL = string.Format(Stringia.sNextSQL, sElleipsiDS, sClosedDS);
 
                     sSQL += System.Environment.NewLine;
 
@@ -367,7 +376,7 @@ namespace WM_SalesOrderSplit
                     oFinalGrid = ((SAPbouiCOM.Grid)form.Items.Item("ResultsGRD").Specific);
 
                     //System.IO.File.WriteAllText(@"C:\Users\wm.user1\Desktop\sSQL.txt", sSQL);
-
+                    
                     oFinalGrid.DataTable.ExecuteQuery(sSQL);
 
                     sErr = "Set oFinalGrid Columns";
@@ -443,11 +452,13 @@ namespace WM_SalesOrderSplit
             SAPbouiCOM.DataTable oResultDT;
 
             bool bSelected = false,
+                 bDontAdd = false,
                  bElleipiEidi = false;
 
             Recordset rsGetData,
                       rsErrorLog,
                       rsGetPFSData,
+                      rsCheckListNum4,
                       rsInsertIntoErrorsTable;
 
             Documents oOrder,
@@ -459,6 +470,8 @@ namespace WM_SalesOrderSplit
                 iProperty;
 
             DateTime dtDocDate;
+
+            BusinessPartners oBP = (BusinessPartners)company.GetBusinessObject(BoObjectTypes.oBusinessPartners); ;
 
             try
             {
@@ -567,7 +580,23 @@ namespace WM_SalesOrderSplit
                         sCardCode = rsGetData.Fields.Item("CardCode").Value.ToString();
                         iDocEntry = Convert.ToInt32(rsGetData.Fields.Item("DocEntry").Value);
 
-                        if (oOrder.Add() != 0)
+                        oBP.GetByKey(oOrder.CardCode);
+
+                        if (oBP.PriceListNum == 4)
+                        {
+                            rsCheckListNum4 = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
+                            rsCheckListNum4.DoQuery("SELECT COUNT(*) A FROM QUT1 Q1 " +
+                                                    " INNER JOIN OITM I ON I.\"ItemCode\" = Q1.\"ItemCode\" " +
+                                                    " WHERE I.\"QryGroup4\" = 'Y' " +
+                                                    " AND Q1.\"DocEntry\" = " + oBaseDoc.DocEntry);
+
+                            if (rsCheckListNum4.Fields.Item("A").Value.ToString() != "0")
+                            {
+                                bDontAdd = true;
+                            }
+                        }
+
+                        if (bDontAdd)
                         {
                             oResultDT.Rows.Add();
 
@@ -576,95 +605,113 @@ namespace WM_SalesOrderSplit
                             oResultDT.SetValue("OriginType", oResultDT.Rows.Count - 1, "23");
                             oResultDT.SetValue("TrgDocNtry", oResultDT.Rows.Count - 1, -1);
                             oResultDT.SetValue("TargetType", oResultDT.Rows.Count - 1, "17");
-                            oResultDT.SetValue("SapErrCode", oResultDT.Rows.Count - 1, company.GetLastErrorCode());
-                            oResultDT.SetValue("SapErrMsg", oResultDT.Rows.Count - 1, company.GetLastErrorDescription());
+                            oResultDT.SetValue("SapErrCode", oResultDT.Rows.Count - 1, "-23");
+                            oResultDT.SetValue("SapErrMsg", oResultDT.Rows.Count - 1, "Σε τιμοκατάλογο Φαρμακεία δεν επιτρέπεται διαχωρισμός με είδη σε έλλειψη.");
                             oResultDT.SetValue("ItmType", oResultDT.Rows.Count - 1, sItemType);
                         }
                         else
                         {
-                            sNewDocEntry = company.GetNewObjectKey();
-
-                            oResultDT.Rows.Add();
-
-                            oResultDT.SetValue("AddRes", oResultDT.Rows.Count - 1, "Επιτυχία");
-                            oResultDT.SetValue("OrgDocNtr", oResultDT.Rows.Count - 1, oBaseDoc.DocEntry);
-                            oResultDT.SetValue("OriginType", oResultDT.Rows.Count - 1, "23");
-                            oResultDT.SetValue("TrgDocNtry", oResultDT.Rows.Count - 1, sNewDocEntry);
-                            oResultDT.SetValue("TargetType", oResultDT.Rows.Count - 1, "17");
-                            oResultDT.SetValue("SapErrCode", oResultDT.Rows.Count - 1, -1);
-                            oResultDT.SetValue("SapErrMsg", oResultDT.Rows.Count - 1, string.Empty);
-                            oResultDT.SetValue("ItmType", oResultDT.Rows.Count - 1, sItemType);
-
-                            sErr = "Update Order UDFS";
-                            rsGetPFSData = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
-                            rsGetPFSData.DoQuery("CALL TKA_SP_UPDATE_ORDR_UDFS_FROM_OQUT(" + sNewDocEntry + ")");
-
-                            sErr = "Check for Existing PFS on quotation";
-                            rsGetPFSData.DoQuery("SELECT \"VisOrder\" " +
-                                                 "   FROM QUT1 " +
-                                                 "   WHERE LEFT(\"ItemCode\", 3) = 'ΠΦΣ' " +
-                                                 "   AND \"DocEntry\" = " + oBaseDoc.DocEntry);
-
-                            if (rsGetPFSData.RecordCount > 0)
+                            if (oOrder.Add() != 0)
                             {
-                                oBaseDocPFS = (Documents)company.GetBusinessObject(BoObjectTypes.oQuotations);
-                                oBaseDocPFS.GetByKey(oBaseDoc.DocEntry);
+                                oResultDT.Rows.Add();
 
-                                while (!rsGetPFSData.EoF)
-                                {
-                                    oBaseDocPFS.Lines.SetCurrentLine(Convert.ToInt32(rsGetPFSData.Fields.Item(0).Value));
-
-                                    oBaseDocPFS.Lines.LineStatus = BoStatus.bost_Close;
-
-                                    rsGetPFSData.MoveNext();
-                                }
-
-                                if (oBaseDocPFS.Update() != 0)
-                                {
-                                    rsErrorLog = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
-                                    string sError = "INSERT INTO ERRORS VALUES(CURRENT_DATE || ' || CURRENT_TIME, 'SalesOrderSplit on Update Base Doc for PFS', '', '$[USERNAME]', '" + company.GetLastErrorDescription().Replace("'", "") + " DocEntry: " + oBaseDocPFS.DocEntry + "', 'ERROR')";
-                                    //Application.MessageBox("[2] Failed to update document...\n\nError Code: " + company.GetLastErrorCode() + "\nError Message: " + company.GetLastErrorDescription());
-                                    rsErrorLog.DoQuery(sError);
-                                }
+                                oResultDT.SetValue("AddRes", oResultDT.Rows.Count - 1, "Σφάλμα");
+                                oResultDT.SetValue("OrgDocNtr", oResultDT.Rows.Count - 1, oBaseDoc.DocEntry);
+                                oResultDT.SetValue("OriginType", oResultDT.Rows.Count - 1, "23");
+                                oResultDT.SetValue("TrgDocNtry", oResultDT.Rows.Count - 1, -1);
+                                oResultDT.SetValue("TargetType", oResultDT.Rows.Count - 1, "17");
+                                oResultDT.SetValue("SapErrCode", oResultDT.Rows.Count - 1, company.GetLastErrorCode());
+                                oResultDT.SetValue("SapErrMsg", oResultDT.Rows.Count - 1, company.GetLastErrorDescription());
+                                oResultDT.SetValue("ItmType", oResultDT.Rows.Count - 1, sItemType);
                             }
-
-                            //check for PFS on Order
-                            rsGetPFSData.DoQuery("SELECT ERROR_ID, ITEM_CODE, AMOUNT, VAT_GROUP FROM TKA_F_CALCULATE_PFS('17', " + sNewDocEntry + ");");
-
-                            if (rsGetPFSData.RecordCount > 0)
+                            else
                             {
-                                rsGetPFSData.MoveFirst();
+                                sNewDocEntry = company.GetNewObjectKey();
 
-                                oOrderPFS = (Documents)company.GetBusinessObject(BoObjectTypes.oOrders);
-                                oOrderPFS.GetByKey(Convert.ToInt32(sNewDocEntry));
+                                oResultDT.Rows.Add();
 
-                                while (!rsGetPFSData.EoF)
+                                oResultDT.SetValue("AddRes", oResultDT.Rows.Count - 1, "Επιτυχία");
+                                oResultDT.SetValue("OrgDocNtr", oResultDT.Rows.Count - 1, oBaseDoc.DocEntry);
+                                oResultDT.SetValue("OriginType", oResultDT.Rows.Count - 1, "23");
+                                oResultDT.SetValue("TrgDocNtry", oResultDT.Rows.Count - 1, sNewDocEntry);
+                                oResultDT.SetValue("TargetType", oResultDT.Rows.Count - 1, "17");
+                                oResultDT.SetValue("SapErrCode", oResultDT.Rows.Count - 1, -1);
+                                oResultDT.SetValue("SapErrMsg", oResultDT.Rows.Count - 1, string.Empty);
+                                oResultDT.SetValue("ItmType", oResultDT.Rows.Count - 1, sItemType);
+
+                                sErr = "Update Order UDFS";
+                                rsGetPFSData = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
+                                rsGetPFSData.DoQuery("CALL TKA_SP_UPDATE_ORDR_UDFS_FROM_OQUT(" + sNewDocEntry + ")");
+
+                                sErr = "Check for Existing PFS on quotation";
+                                rsGetPFSData.DoQuery("SELECT \"VisOrder\" " +
+                                                     "   FROM QUT1 " +
+                                                     "   WHERE LEFT(\"ItemCode\", 3) = 'ΠΦΣ' " +
+                                                     "   AND \"DocEntry\" = " + oBaseDoc.DocEntry);
+
+                                if (rsGetPFSData.RecordCount > 0)
                                 {
-                                    if (Convert.ToInt32(rsGetPFSData.Fields.Item("ERROR_ID").Value, CultureInfo.InvariantCulture) != 0)
-                                    {
-                                        oOrderPFS.Lines.Add();
+                                    oBaseDocPFS = (Documents)company.GetBusinessObject(BoObjectTypes.oQuotations);
+                                    oBaseDocPFS.GetByKey(oBaseDoc.DocEntry);
 
-                                        oOrderPFS.Lines.ItemCode = Convert.ToString(rsGetPFSData.Fields.Item("ITEM_CODE").Value, CultureInfo.InvariantCulture);
-                                        oOrderPFS.Lines.LineTotal = Convert.ToDouble(rsGetPFSData.Fields.Item("AMOUNT").Value, CultureInfo.InvariantCulture);
-                                        oOrderPFS.Lines.VatGroup = Convert.ToString(rsGetPFSData.Fields.Item("VAT_GROUP").Value, CultureInfo.InvariantCulture);
+                                    while (!rsGetPFSData.EoF)
+                                    {
+                                        oBaseDocPFS.Lines.SetCurrentLine(Convert.ToInt32(rsGetPFSData.Fields.Item(0).Value));
+
+                                        oBaseDocPFS.Lines.LineStatus = BoStatus.bost_Close;
+
+                                        rsGetPFSData.MoveNext();
                                     }
 
-                                    rsGetPFSData.MoveNext();
+                                    if (oBaseDocPFS.Update() != 0)
+                                    {
+                                        rsErrorLog = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
+                                        string sError = "INSERT INTO ERRORS VALUES(CURRENT_DATE || ' || CURRENT_TIME, 'SalesOrderSplit on Update Base Doc for PFS', '', '$[USERNAME]', '" + company.GetLastErrorDescription().Replace("'", "") + " DocEntry: " + oBaseDocPFS.DocEntry + "', 'ERROR')";
+                                        //Application.MessageBox("[2] Failed to update document...\n\nError Code: " + company.GetLastErrorCode() + "\nError Message: " + company.GetLastErrorDescription());
+                                        rsErrorLog.DoQuery(sError);
+                                    }
                                 }
 
-                                if (oOrderPFS.Update() != 0)
+                                //check for PFS on Order
+                                rsGetPFSData.DoQuery("SELECT ERROR_ID, ITEM_CODE, AMOUNT, VAT_GROUP FROM TKA_F_CALCULATE_PFS('17', " + sNewDocEntry + ");");
+
+                                if (rsGetPFSData.RecordCount > 0)
                                 {
-                                    rsErrorLog = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
-                                    string sError = "INSERT INTO ERRORS VALUES(CURRENT_DATE || ' || CURRENT_TIME, 'SalesOrderSplit on Update for PFS', '', '$[USERNAME]', '" + company.GetLastErrorDescription().Replace("'", "") + " DocEntry: " + oOrderPFS.DocEntry + "', 'ERROR')";
-                                    //Application.MessageBox("[2] Failed to update document...\n\nError Code: " + company.GetLastErrorCode() + "\nError Message: " + company.GetLastErrorDescription());
-                                    rsErrorLog.DoQuery(sError);
+                                    rsGetPFSData.MoveFirst();
+
+                                    oOrderPFS = (Documents)company.GetBusinessObject(BoObjectTypes.oOrders);
+                                    oOrderPFS.GetByKey(Convert.ToInt32(sNewDocEntry));
+
+                                    while (!rsGetPFSData.EoF)
+                                    {
+                                        if (Convert.ToInt32(rsGetPFSData.Fields.Item("ERROR_ID").Value, CultureInfo.InvariantCulture) != 0)
+                                        {
+                                            oOrderPFS.Lines.Add();
+
+                                            oOrderPFS.Lines.ItemCode = Convert.ToString(rsGetPFSData.Fields.Item("ITEM_CODE").Value, CultureInfo.InvariantCulture);
+                                            oOrderPFS.Lines.LineTotal = Convert.ToDouble(rsGetPFSData.Fields.Item("AMOUNT").Value, CultureInfo.InvariantCulture);
+                                            oOrderPFS.Lines.VatGroup = Convert.ToString(rsGetPFSData.Fields.Item("VAT_GROUP").Value, CultureInfo.InvariantCulture);
+                                        }
+
+                                        rsGetPFSData.MoveNext();
+                                    }
+
+                                    if (oOrderPFS.Update() != 0)
+                                    {
+                                        rsErrorLog = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
+                                        string sError = "INSERT INTO ERRORS VALUES(CURRENT_DATE || ' || CURRENT_TIME, 'SalesOrderSplit on Update for PFS', '', '$[USERNAME]', '" + company.GetLastErrorDescription().Replace("'", "") + " DocEntry: " + oOrderPFS.DocEntry + "', 'ERROR')";
+                                        //Application.MessageBox("[2] Failed to update document...\n\nError Code: " + company.GetLastErrorCode() + "\nError Message: " + company.GetLastErrorDescription());
+                                        rsErrorLog.DoQuery(sError);
+                                    }
                                 }
                             }
                         }
 
-                        sItemType = rsGetData.Fields.Item("ItmsGrpNam").Value.ToString();
-                        oOrder = null;
+                        bDontAdd = false;
 
+                        sItemType = rsGetData.Fields.Item("ItmsGrpNam").Value.ToString();
+
+                        oOrder = null;
                         oOrder = (Documents)company.GetBusinessObject(BoObjectTypes.oOrders);
 
                         if (iDocEntry != 99999999)
@@ -750,6 +797,7 @@ namespace WM_SalesOrderSplit
                     prg = null;
                 }
 
+                // edw fernoume apo katw ta elleiph eidh apo ta epilegmena quotations, ean exei epilexthei to antistoixo checkbox
                 if (bElleipiEidi)
                 {
                     try
@@ -846,8 +894,8 @@ namespace WM_SalesOrderSplit
                 )
             {
 
-                SAPbouiCOM.Framework.Application.SBO_Application.StatusBar.SetText("Υπολογισμός Μεικτών Εκπτώσεων", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
-
+                Application.SBO_Application.StatusBar.SetText("Υπολογισμός Μεικτών Εκπτώσεων", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
+                
                 try
                 {
                     string sFinalItemCodes = "",
@@ -896,7 +944,8 @@ namespace WM_SalesOrderSplit
 
                     SAPbouiCOM.Matrix oMatrix = (SAPbouiCOM.Matrix)form.Items.Item("38").Specific;
 
-                    if (form.DataSources.DBDataSources.Item(sDBDS).GetValue("DocStatus", 0).ToString() == "C")
+                    if (form.DataSources.DBDataSources.Item(sDBDS).GetValue("DocStatus", 0).ToString() == "C"
+                        && sDBDS != "OQUT")
                     {
                         return;
                     }
@@ -904,7 +953,7 @@ namespace WM_SalesOrderSplit
                     for (int i = 1; i <= oMatrix.VisualRowCount; i++)
                     {
                         sItem = ((SAPbouiCOM.EditText)oMatrix.Columns.Item("1").Cells.Item(i).Specific).Value.ToString();
-                        dQty = Convert.ToDouble(((SAPbouiCOM.EditText)oMatrix.Columns.Item("11").Cells.Item(i).Specific).Value, System.Globalization.CultureInfo.InvariantCulture);
+                        dQty = Convert.ToDouble(((SAPbouiCOM.EditText)oMatrix.Columns.Item("11").Cells.Item(i).Specific).Value, CultureInfo.InvariantCulture);
 
                         if (string.IsNullOrEmpty(sItem))
                         {
@@ -917,7 +966,7 @@ namespace WM_SalesOrderSplit
                             {
                                 ListItemCodes.Add(sItem, dQty);
 
-                                sFinalItemCodes += ";" + sItem + "?" + dQty;
+                                //sFinalItemCodes += ";" + sItem + "?" + dQty;
                             }
                             else
                             {
@@ -925,57 +974,23 @@ namespace WM_SalesOrderSplit
                             }
                         }
                     }
+
+                    foreach (KeyValuePair<string, double> sz in ListItemCodes)
+                    {
+                        sFinalItemCodes += ";" + sz.Key + "?" + sz.Value;
+                    }
+
                     sFinalItemCodes = sFinalItemCodes.Substring(1);
 
                     rsPrama = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
 
-                    //string sSQL = "SELECT ITEMCODE FROM TKA_F_GET_MEIKTES_DISCOUNTS_V3('" + sFinalItemCodes + "', '" + sCardCode + "', CURRENT_DATE, '', '')";
                     string sSQL = "CALL TKA_SP_GET_MEIKTES_DISCOUNTS_V3('" + sFinalItemCodes + "', '" + sCardCode + "', CURRENT_DATE, '', '')";
 
                     rsPrama.DoQuery(sSQL);
 
                     if (rsPrama.RecordCount > 0)
                     {
-                        /*rsPrama.MoveFirst();
-                        
-                        while (!rsPrama.EoF)
-                        { // vriskoume ta eidh set
-                            if (!lExistingItems.Contains(rsPrama.Fields.Item("ITEMCODE").Value.ToString()))
-                            {
-                                lExistingItems.Add(rsPrama.Fields.Item("ITEMCODE").Value.ToString());
-                            }
-
-                            rsPrama.MoveNext();
-                        }
-
-                        // vriskoume ta eidh poy einai sthn paraggelia alla oxi se set
-                        foreach (KeyValuePair<string, double> p in ListItemCodes)
-                        {
-                            if (!lExistingItems.Contains(p.Key))
-                            {
-                                lNonExistingItems.Add(p.Key);
-                            }
-                        }
-
-                        // trwme ta eidh poy einai sthn paraggelia alla oxi se set
-                        for (int i = 0; i < lNonExistingItems.Count; i++)
-                        {
-                            ListItemCodes.Remove(lNonExistingItems[i]);
-                        }
-
-                        double dTotalSetQty = 0.0;
-
-                        // vriskoume to total twn eidwn set
-                        foreach (KeyValuePair<string, double> p in ListItemCodes)
-                        {
-                            dTotalSetQty += p.Value;
-                        }
-
-                        rsPrama.DoQuery("SELECT * FROM TKA_F_GET_MEIKTES_DISCOUNTS_V3('" + sFinalItemCodes + "', '" + sCardCode + "', CURRENT_DATE, '', '')");
-
-                        if (rsPrama.RecordCount > 0)
-                        {*/
-                        if (SAPbouiCOM.Framework.Application.SBO_Application.MessageBox("Βρέθηκαν τιμές σετ.\nΕνημέρωση γραμμών;", 2, "Ναι", "Όχι") != 1)
+                        if (Application.SBO_Application.MessageBox("Βρέθηκαν τιμές σετ.\nΕνημέρωση γραμμών;", 2, "Ναι", "Όχι") != 1)
                         {
                             return;
                         }
@@ -998,13 +1013,12 @@ namespace WM_SalesOrderSplit
                                 ((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_TKA_Discount1").Cells.Item(i).Specific).Value = string.Empty;
                                 ((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_TKA_Discount3").Cells.Item(i).Specific).Value = string.Empty;
 
-                                continue;
+                                //continue;
                             }
                         }
 
                         rsPrama.MoveNext();
                     }
-                    //}
                 }
                 catch (Exception e)
                 {
