@@ -22,7 +22,12 @@ namespace WM_SalesOrderSplit
             {
                 form = SAPbouiCOM.Framework.Application.SBO_Application.Forms.ActiveForm;
             }
-            catch (Exception) { }
+            catch (Exception e)
+            {
+                Recordset rsError = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
+                rsError.DoQuery("INSERT INTO ERRORS VALUES(CURRENT_DATE || ' ' || CURRENT_TIME, 'SalesOrderSplit', '', '" + company.UserName + "', '" + e.Message.Replace("'", "") + " " + e.StackTrace.ToString().Replace("'", "") + "', 'ERROR')");
+                return;
+            }
 
             if ((
                 pVal.FormType.ToString() == "133" ||

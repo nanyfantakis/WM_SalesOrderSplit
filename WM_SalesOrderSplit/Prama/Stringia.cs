@@ -268,7 +268,7 @@ namespace WM_SalesOrderSplit.Prama
                        "            99999999 " +
                        "        FROM DUMMY ) V " +
                        "        LEFT JOIN OITG G ON G.\"ItmsTypCod\" = V.PROPERTIES " +
-                       "    ORDER BY 1 ASC, 9 ",
+                       "    ORDER BY 1 ASC, 10 ",
 
             sNextSQL = "SELECT " + 
 	                   "     'N' \"Check\", " + 

@@ -50,6 +50,15 @@ namespace WM_SalesOrderSplit
             {
                 if (pVal.BeforeAction && pVal.MenuUID == "SalesOrderSplitMenu")
                 {
+                    for (int i = 0; i< Application.SBO_Application.Forms.Count; i++)
+                    {
+                        if (Application.SBO_Application.Forms.Item(i).TypeEx == "WMSalesOrderSplit")
+                        {
+                            Application.SBO_Application.MessageBox("Η Φόρμα Ειδικού Διαχωρισμού Παραγγελιών είναι ήδη ανοιχτή.");
+                            return;
+                        }
+                    }
+                    
                     string sFormAsXML = Stringia.sWM_SalesOrderSplit;
 
                     SAPbouiCOM.FormCreationParams oCreationParams = null;
@@ -63,6 +72,7 @@ namespace WM_SalesOrderSplit
 
                     form.DataSources.UserDataSources.Item("SlctAllPn1").Value = "Y";
                     form.DataSources.UserDataSources.Item("ElleipsiDS").Value = "N";
+                    form.DataSources.UserDataSources.Item("SeriesTo").Value = "8";
 
                     rsGetPrama = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
 
@@ -266,6 +276,14 @@ namespace WM_SalesOrderSplit
                         form.ActiveItem = "SeriesTo";
                         return;
                     }
+                    else if (form.DataSources.UserDataSources.Item("SeriesTo").Value.ToString() != "8")
+                    {
+                        if (Application.SBO_Application.MessageBox("Έχει Επιλεχθεί Σειρά Παραστατικού Στόχου " + ((SAPbouiCOM.ComboBox)form.Items.Item("SeriesTo").Specific).Selected.Description + "\nΣυνέχεια;", 1, "Ναι", "Όχι") != 1)
+                        {
+                            form.ActiveItem = "SeriesTo";
+                            return;
+                        }
+                    }
                     if (string.IsNullOrEmpty(form.DataSources.UserDataSources.Item("DocDateDS").Value.ToString()))
                     {
                         Application.SBO_Application.StatusBar.SetText("Παρακαλώ Συμπληρώστε Ημ. Καταχώρησης Στόχου.", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Error);
@@ -441,6 +459,7 @@ namespace WM_SalesOrderSplit
         {
             string sDocEntries = "0",
                    sErr = "",
+                   sError,
                    sSQL,
                    sCardCode,
                    sItemType,
@@ -471,7 +490,7 @@ namespace WM_SalesOrderSplit
 
             DateTime dtDocDate;
 
-            BusinessPartners oBP = (BusinessPartners)company.GetBusinessObject(BoObjectTypes.oBusinessPartners); ;
+            BusinessPartners oBP = (BusinessPartners)company.GetBusinessObject(BoObjectTypes.oBusinessPartners);
 
             try
             {
@@ -565,8 +584,16 @@ namespace WM_SalesOrderSplit
                 Recordset rsDateTimeFormat = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
                 rsDateTimeFormat = oSBObob.Format_StringToDate(form.DataSources.UserDataSources.Item("DocDateDS").ValueEx);
                 dtDocDate = Convert.ToDateTime(rsDateTimeFormat.Fields.Item(0).Value);
-                rsDateTimeFormat = null;
-                oSBObob = null;
+
+                try
+                {
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(rsDateTimeFormat);
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(oSBObob);
+
+                    rsDateTimeFormat = null;
+                    oSBObob = null;
+                }
+                catch (Exception) { }
 
                 oOrder = (Documents)company.GetBusinessObject(BoObjectTypes.oOrders);
 
@@ -594,7 +621,16 @@ namespace WM_SalesOrderSplit
                             {
                                 bDontAdd = true;
                             }
+
+                            try
+                            {
+                                System.Runtime.InteropServices.Marshal.ReleaseComObject(rsCheckListNum4);
+
+                                rsCheckListNum4 = null;
+                            }
+                            catch (Exception) { }
                         }
+
 
                         if (bDontAdd)
                         {
@@ -666,8 +702,7 @@ namespace WM_SalesOrderSplit
                                     if (oBaseDocPFS.Update() != 0)
                                     {
                                         rsErrorLog = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
-                                        string sError = "INSERT INTO ERRORS VALUES(CURRENT_DATE || ' || CURRENT_TIME, 'SalesOrderSplit on Update Base Doc for PFS', '', '$[USERNAME]', '" + company.GetLastErrorDescription().Replace("'", "") + " DocEntry: " + oBaseDocPFS.DocEntry + "', 'ERROR')";
-                                        //Application.MessageBox("[2] Failed to update document...\n\nError Code: " + company.GetLastErrorCode() + "\nError Message: " + company.GetLastErrorDescription());
+                                        sError = "INSERT INTO ERRORS VALUES(CURRENT_DATE || ' ' || CURRENT_TIME, 'SalesOrderSplit on Update Base Doc for PFS', '', '" + company.UserName + "', '" + company.GetLastErrorDescription().Replace("'", "") + " DocEntry: " + oBaseDocPFS.DocEntry + "', 'ERROR')";
                                         rsErrorLog.DoQuery(sError);
                                     }
                                 }
@@ -699,11 +734,19 @@ namespace WM_SalesOrderSplit
                                     if (oOrderPFS.Update() != 0)
                                     {
                                         rsErrorLog = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
-                                        string sError = "INSERT INTO ERRORS VALUES(CURRENT_DATE || ' || CURRENT_TIME, 'SalesOrderSplit on Update for PFS', '', '$[USERNAME]', '" + company.GetLastErrorDescription().Replace("'", "") + " DocEntry: " + oOrderPFS.DocEntry + "', 'ERROR')";
+                                        sError = "INSERT INTO ERRORS VALUES(CURRENT_DATE || ' ' || CURRENT_TIME, 'SalesOrderSplit on Update for PFS', '', '" + company.UserName + "', '" + company.GetLastErrorDescription().Replace("'", "") + " DocEntry: " + oOrderPFS.DocEntry + "', 'ERROR')";
                                         //Application.MessageBox("[2] Failed to update document...\n\nError Code: " + company.GetLastErrorCode() + "\nError Message: " + company.GetLastErrorDescription());
                                         rsErrorLog.DoQuery(sError);
                                     }
                                 }
+
+                                try
+                                {
+                                    System.Runtime.InteropServices.Marshal.ReleaseComObject(rsGetPFSData);
+
+                                    rsGetPFSData = null;
+                                }
+                                catch (Exception) { }
                             }
                         }
 
@@ -735,45 +778,11 @@ namespace WM_SalesOrderSplit
                     oOrder.TaxDate = dtDocDate;
                     oOrder.DocDueDate = dtDocDate;
 
-                    /*Recordset oRSFieldsHeader = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
-
-                    oRSFieldsHeader.DoQuery(sSQLHeader);
-                    oRSFieldsHeader.MoveFirst();
-
-                    while (!oRSFieldsHeader.EoF)
-                    {
-                        string sFieldName = "U_" + oRSFieldsHeader.Fields.Item("AliasID").Value.ToString() + "";
-
-                        if (!string.IsNullOrEmpty(oBaseDoc.UserFields.Fields.Item(sFieldName).Value.ToString()))
-                        {
-                            oOrder.UserFields.Fields.Item(sFieldName).Value = oBaseDoc.UserFields.Fields.Item(sFieldName).Value;
-                        }
-
-                        oRSFieldsHeader.MoveNext();
-                    }*/
-
                     oBaseDoc.Lines.SetCurrentLine(Convert.ToInt32(rsGetData.Fields.Item("VisOrder").Value));
 
                     oOrder.Lines.BaseLine = Convert.ToInt32(rsGetData.Fields.Item("LineNum").Value);
                     oOrder.Lines.BaseEntry = iDocEntry;
                     oOrder.Lines.BaseType = 23;
-
-                    sErr = "Get U_Fields for Lines - Final Doc";
-                    /*Recordset oRSFields = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
-                    oRSFields.DoQuery(sSQLLines);
-                    oRSFields.MoveFirst();
-
-                    while (oRSFields.EoF == false)
-                    {
-                        string sFieldName = "U_" + oRSFields.Fields.Item("AliasID").Value.ToString() + "";
-
-                        if (!string.IsNullOrEmpty(oBaseDoc.Lines.UserFields.Fields.Item(sFieldName).Value.ToString()))
-                        {
-                            oOrder.Lines.UserFields.Fields.Item(sFieldName).Value = oBaseDoc.Lines.UserFields.Fields.Item(sFieldName).Value;
-                        }
-
-                        oRSFields.MoveNext();
-                    }*/
 
                     oOrder.Lines.Add();
 
@@ -833,6 +842,14 @@ namespace WM_SalesOrderSplit
                     }
                 }
 
+                try
+                {
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(rsGetData);
+
+                    rsGetData = null;
+                }
+                catch (Exception) { }
+
                 oAddResultGrid.Columns.Item("AddRes").TitleObject.Caption = "Αποτέλεσμα";
                 oAddResultGrid.Columns.Item("OrgDocNtr").TitleObject.Caption = "Κλ.Παραστατικού Βάσης";
                 oAddResultGrid.Columns.Item("OriginType").TitleObject.Caption = "Τύπος Παραστατικού Βάσης";
@@ -875,7 +892,12 @@ namespace WM_SalesOrderSplit
             {
                 form = Application.SBO_Application.Forms.ActiveForm;
             }
-            catch (Exception) { }
+            catch (Exception e) 
+            {
+                Recordset rsError = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
+                rsError.DoQuery("INSERT INTO ERRORS VALUES(CURRENT_DATE || ' ' || CURRENT_TIME, 'SalesOrderSplit', '', '" + company.UserName + "', '" + e.Message.Replace("'", "") + " " + e.StackTrace.ToString().Replace("'", "") + "', 'ERROR')");
+                return;
+            }
 
             if ((
                 pVal.FormType.ToString() == "133" ||
@@ -904,7 +926,8 @@ namespace WM_SalesOrderSplit
                        sDBDS = "",
                        sFormType = form.Type.ToString(); // "$[CURRENT_FORMTYPE]";
 
-                    double dQty = 0.0;
+                    double dQty = 0.0,
+                           dDisc = 0.0;
 
                     Dictionary<string, double> ListItemCodes = new Dictionary<string, double>();
 
@@ -962,15 +985,20 @@ namespace WM_SalesOrderSplit
 
                         if (!sItem.StartsWith("ΠΦΣ"))
                         {
-                            if (!ListItemCodes.ContainsKey(sItem))
-                            {
-                                ListItemCodes.Add(sItem, dQty);
+                            dDisc = Convert.ToDouble(((SAPbouiCOM.EditText)oMatrix.Columns.Item("U_TKA_SalesDiscount").Cells.Item(i).Specific).Value, CultureInfo.InvariantCulture);
 
-                                //sFinalItemCodes += ";" + sItem + "?" + dQty;
-                            }
-                            else
+                            if (dDisc != 100)
                             {
-                                ListItemCodes[sItem] = ListItemCodes[sItem] + dQty;
+                                if (!ListItemCodes.ContainsKey(sItem))
+                                {
+                                    ListItemCodes.Add(sItem, dQty);
+
+                                    //sFinalItemCodes += ";" + sItem + "?" + dQty;
+                                }
+                                else
+                                {
+                                    ListItemCodes[sItem] = ListItemCodes[sItem] + dQty;
+                                }
                             }
                         }
                     }
@@ -980,7 +1008,14 @@ namespace WM_SalesOrderSplit
                         sFinalItemCodes += ";" + sz.Key + "?" + sz.Value;
                     }
 
-                    sFinalItemCodes = sFinalItemCodes.Substring(1);
+                    if (sFinalItemCodes.Length > 0)
+                    {
+                        sFinalItemCodes = sFinalItemCodes.Substring(1);
+                    }
+                    else
+                    {
+                        return;
+                    }
 
                     rsPrama = (Recordset)company.GetBusinessObject(BoObjectTypes.BoRecordset);
 
